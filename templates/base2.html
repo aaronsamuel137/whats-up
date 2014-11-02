@@ -62,19 +62,32 @@
 
     <div class="container">
 
-      
       <div class="starter-template">
 
-      <form role="form">
-        <div class="form-group">
-          <input type="search" placeholder="Search for a topic" class="form-control">
+        <div id="header">
+          {% block header %}{% end %}
         </div>
-        <button type="submit" class="btn btn-success">Go</button>
-      </form> 
-        <!--
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-        -->        
+
+        <form role="form">
+          <div class="form-group">
+            <input type="search" placeholder="Search for a topic" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-success">Go</button>
+        </form> 
+
+
+        <div id="content">
+          {% block content %}{% end %}
+        </div>      
+          <!--
+          <h1>Bootstrap starter template</h1>
+          <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+          -->        
+        
+        <div id="footer">
+          {% block footer %}{% end %}
+        </div>
+
       </div>
      
 
@@ -82,17 +95,11 @@
 
 
 
-    <div id="header">
-      {% block header %}{% end %}
-    </div>
 
-    <div id="content">
-      {% block content %}{% end %}
-    </div>
 
-    <div id="footer">
-      {% block footer %}{% end %}
-    </div>
+
+
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
