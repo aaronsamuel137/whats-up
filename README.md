@@ -12,5 +12,3 @@ Run with server with:
 ```bash
 python3 app.py
 ```
-
-test
