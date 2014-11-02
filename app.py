@@ -4,8 +4,11 @@ import os.path
 import json
 from tweets import get_tweets
 
-# keep this flag true to avoid having to restart the application to reload files
-DEBUG = True
+from tornado.options import parse_command_line, define, options
+
+# optional commandline args and default values
+define('port', default=8888)
+define('debug', default=True)
 
 # Handler for main page
 class MainHandler(tornado.web.RequestHandler):
@@ -34,9 +37,17 @@ handlers = [
 
 # add the templates directory to application settings
 settings = dict(template_path=os.path.join(os.path.dirname(__file__), 'templates'))
-application = tornado.web.Application(handlers, debug=DEBUG, **settings)
 
 # start the server
 if __name__ == '__main__':
-    application.listen(8888)
+    parse_command_line()
+
+    print('server running on port ' + str(options.port))
+
+    if options.debug:
+        print('running app in debug mode')
+
+    application = tornado.web.Application(handlers, debug=options.debug, **settings)
+    application.listen(options.port)
+
     tornado.ioloop.IOLoop.instance().start()
