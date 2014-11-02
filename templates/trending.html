@@ -1,0 +1,28 @@
+{% extends "base2.html" %}
+
+{% block head %}
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="/static/js/display-tweets.js"></script>
+{% end %}
+
+{% block header %}
+<h1>Search for a topic to find out What's Up on Twitter.</h1>
+{% end %}
+
+{% block content %}
+<form role="form">
+  <div class="form-group">
+    <input type="search" placeholder="Search for a topic" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-success">Go</button>
+</form> 
+
+<ul id="tweet-listing">
+</ul>
+
+{% end %}
+
+{% block footer %}
+<p>Home Footer</p>
+{% end %}
