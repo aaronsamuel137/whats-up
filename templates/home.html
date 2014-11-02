@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 
+{% block head %}
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script type="text/javascript" src="/static/js/display-tweets.js"></script>
+{% end %}
+
 {% block header %}
   <h1>Home</h1>
 {% end %}
 
 {% block content %}
 
-<ul>
- {% for tweet in tweets %}
-     <li>{{ tweet }}</li>
- {% end %}
+<ul id="tweet-listing">
 </ul>
+
 {% end %}
 
 {% block footer %}

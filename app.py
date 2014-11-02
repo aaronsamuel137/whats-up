@@ -36,7 +36,8 @@ handlers = [
 ]
 
 # add the templates directory to application settings
-settings = dict(template_path=os.path.join(os.path.dirname(__file__), 'templates'))
+settings = dict(template_path=os.path.join(os.path.dirname(__file__), 'templates'),
+                static_path=os.path.join(os.path.dirname(__file__), 'static'))
 
 # start the server
 if __name__ == '__main__':
