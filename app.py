@@ -13,8 +13,7 @@ define('debug', default=True)
 # Handler for main page
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        tweets = get_tweets()
-        self.render('home.html', tweets=tweets, title="What's Up")
+        self.render('home.html', title="What's Up")
 
 # Handler for about page
 class AboutHandler(tornado.web.RequestHandler):
