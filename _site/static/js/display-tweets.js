@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  var secondsBetweenReloads = 60;
+  var secondsBetweenReloads = 10;
   var endpoint = '/data';
   var query = '?number=10';
 
@@ -10,6 +10,7 @@ $(document).ready(function() {
     $.ajax({
       url: endpoint + query
     }).then(function(data) {
+      console.log('reload');
       data = $.parseJSON(data)
       $('#tweet-listing').empty();
       for (var i = 0; i < data.length; i++) {
