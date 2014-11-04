@@ -16,6 +16,20 @@ class MainHandler(tornado.web.RequestHandler):
         tweets = get_tweets()
         self.render('home.html', tweets=tweets)
 
+# Handler for about page
+class AboutHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('about.html')
+
+# Handler for trending page
+class TrendingHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('trending.html')
+
+# Handler for sentiments page
+class SentimentsHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('sentiments.html')
 
 # Handler for our rest API
 class APIHandler(tornado.web.RequestHandler):
@@ -33,6 +47,9 @@ class APIHandler(tornado.web.RequestHandler):
 handlers = [
     (r'/', MainHandler),
     (r'/data', APIHandler),
+    (r'/about', AboutHandler),
+    (r'/sentiments', SentimentsHandler),
+    (r'/trending', TrendingHandler),
 ]
 
 # add the templates directory to application settings
