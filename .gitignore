@@ -57,3 +57,10 @@ target/
 
 # Twitter App Key file
 appKey.txt
+
+# Ignore common temporary files
+*~
+\#*\#
+
+# Ignore the sample twitter data
+samples.txt
