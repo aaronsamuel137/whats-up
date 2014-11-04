@@ -64,6 +64,7 @@ if __name__ == '__main__':
 
     if options.debug:
         print('running app in debug mode')
+>>>>>>> d4660662ebc63eb318db571f7f94a3eae5e916c5
 
     application = tornado.web.Application(handlers, debug=options.debug, **settings)
     application.listen(options.port)
