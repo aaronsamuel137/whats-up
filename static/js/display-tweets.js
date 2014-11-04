@@ -1,24 +1,30 @@
 $(document).ready(function() {
-  var secondsBetweenReloads = 10;
-  var endpoint = '/data';
-  var query = '?number=10';
+  var secondsBetweenReloads = 5;
 
-  /*
-   * load tweets from our rest endpoint and list the in the tweet-listing <ul>
-   */
-  var loadTweets = function() {
-    $.ajax({
-      url: endpoint + query
-    }).then(function(data) {
-      console.log('reload');
-      data = $.parseJSON(data)
-      $('#tweet-listing').empty();
-      for (var i = 0; i < data.length; i++) {
-        $('#tweet-listing').append($('<li/>').append(data[i]));
-      }
-    });
-  };
-
-  loadTweets();
-  window.setInterval(loadTweets, secondsBetweenReloads * 1000);
+  // loadTweets(10);
+  // window.setInterval(function() {loadTweets(10);}, secondsBetweenReloads * 1000);
 });
+
+/*
+ * load tweets from our rest endpoint and list the in the tweet-listing <ul>
+ */
+function loadTweets(number, topic) {
+  var query = '/data?number=' + number + '&' + 'topic=' + topic;
+  console.log(query);
+  $.ajax({
+    url: query
+  }).then(function(data) {
+    data = $.parseJSON(data);
+    $('#tweet-listing').empty();
+    for (var i = 0; i < data.length; i++) {
+      $('#tweet-listing').append($('<li/>').append(data[i]));
+    }
+  });
+};
+
+function getTweets(){
+  console.log('here');
+  var topic = $('#search-box').val();
+  loadTweets(10);
+  return false;
+}
