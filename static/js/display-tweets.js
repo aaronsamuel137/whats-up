@@ -1,12 +1,12 @@
 $(document).ready(function() {
-  var secondsBetweenReloads = 60;
+  var secondsBetweenReloads = 5;
   var endpoint = '/data';
-  var query = '?number=10';
 
   /*
    * load tweets from our rest endpoint and list the in the tweet-listing <ul>
    */
-  var loadTweets = function() {
+  var loadTweets = function(number, topic) {
+    var query = '?number=' + number + '&' + 'topic=' + topic;
     $.ajax({
       url: endpoint + query
     }).then(function(data) {
@@ -18,6 +18,6 @@ $(document).ready(function() {
     });
   };
 
-  loadTweets();
-  window.setInterval(loadTweets, secondsBetweenReloads * 1000);
+  loadTweets(10);
+  window.setInterval(function() {loadTweets(10);}, secondsBetweenReloads * 1000);
 });

@@ -39,6 +39,7 @@ class APIHandler(tornado.web.RequestHandler):
         except:
             self.write('invalid query parameter')
             return
+        topic = self.get_argument('topic', default='')
         tweets = get_tweets()
         self.write(json.dumps(tweets[:number] if len(tweets) >= number else tweets))
 
