@@ -11,10 +11,10 @@ APP_SECRET = appKeyFile.readline().rstrip()
 OAUTH_TOKEN = appKeyFile.readline().rstrip()#auth['oauth_token']
 OAUTH_TOKEN_SECRET = appKeyFile.readline().rstrip()#auth['oauth_token_secret']
 
-print APP_KEY
-print APP_SECRET
-print OAUTH_TOKEN
-print OAUTH_TOKEN_SECRET
+print(APP_KEY)
+print(APP_SECRET)
+print(OAUTH_TOKEN)
+print(OAUTH_TOKEN_SECRET)
 
 samples = open("samples.txt", "w")
 
@@ -36,4 +36,4 @@ stream = MyStreamer(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 stream.statuses.sample()
 #time.sleep(10)
 stream.disconnect()
-print "Done"
+print("Done")
