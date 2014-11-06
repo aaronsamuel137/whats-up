@@ -4,7 +4,7 @@ import os.path
 import json
 
 from tweets import get_tweets
-from multiprocessing import Process, Pipe
+from multiprocessing import Process, Pipe, Queue
 from tornado.options import parse_command_line, define, options
 
 # optional commandline args and default values
@@ -34,7 +34,7 @@ class SentimentsHandler(tornado.web.RequestHandler):
 
 # Handler for our rest API
 class APIHandler(tornado.web.RequestHandler):
-    def initialize(self, pipe):
+    def initialize(self, pipe, queue):
         self.pipe = pipe
 
     def get(self):
@@ -45,8 +45,9 @@ class APIHandler(tornado.web.RequestHandler):
             self.write('invalid query parameter')
             return
         topic = self.get_argument('topic', default='')
-        tweets = self.pipe.recv()
-        self.write(json.dumps(tweets[:number] if len(tweets) >= number else tweets))
+        tweets = [self.pipe.recv() for i in range(number)]
+        #self.write(json.dumps(tweets[:number] if len(tweets) >= number else tweets))
+        self.write(json.dumps(tweets))
 
 # add the templates directory and static directory to application settings
 settings = dict(template_path=os.path.join(os.path.dirname(__file__), 'templates'),
@@ -63,17 +64,18 @@ if __name__ == '__main__':
 
     # pipe for piping data from the twitter stream process
     parent_conn, child_conn = Pipe()
+    tweet_queue  = Queue()
 
     # handlers for every url go here
     handlers = [
         (r'/', MainHandler),
-        (r'/data', APIHandler, dict(pipe=parent_conn)),
+        (r'/data', APIHandler, dict(pipe=parent_conn, queue=tweet_queue)),
         (r'/about', AboutHandler),
         (r'/sentiments', SentimentsHandler),
         (r'/trending', TrendingHandler),
     ]
 
-    twitter_stream = Process(target=get_tweets, args=(child_conn,))
+    twitter_stream = Process(target=get_tweets, args=(child_conn, tweet_queue, ))
     twitter_stream.start()
 
     application = tornado.web.Application(handlers, debug=options.debug, **settings)
