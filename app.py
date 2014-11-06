@@ -45,8 +45,14 @@ class APIHandler(tornado.web.RequestHandler):
             self.write('invalid query parameter')
             return
         topic = self.get_argument('topic', default='')
-        tweets = [self.pipe.recv() for i in range(number)]
-        #self.write(json.dumps(tweets[:number] if len(tweets) >= number else tweets))
+
+        tweets = []
+        while len(tweets) < number:
+            tweet = self.pipe.recv()
+            if 'text' in tweet and len(tweet['text']) > 0:
+                tweets.append(tweet)
+            else:
+                print(tweet)
         self.write(json.dumps(tweets))
 
 # add the templates directory and static directory to application settings
