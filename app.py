@@ -2,7 +2,6 @@ import tornado.ioloop
 import tornado.web
 import os.path
 import json
-import time # need for sleep, we might be able to remove this when the test get_tweet function is updated
 
 from tweets import get_tweets
 from multiprocessing import Process, Pipe
