@@ -10,7 +10,6 @@ $(document).ready(function() {
  */
 function loadTweets(number, topic) {
   var query = '/data?number=' + number + '&' + 'topic=' + topic;
-  console.log(query);
   $.ajax({
     url: query
   }).then(function(data) {
@@ -23,7 +22,7 @@ function loadTweets(number, topic) {
 };
 
 function getTweets(){
-  console.log('here');
+  $('#search-btn').blur();
   var topic = $('#search-box').val();
   loadTweets(10);
   return false;
