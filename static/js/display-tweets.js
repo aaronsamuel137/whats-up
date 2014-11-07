@@ -26,6 +26,6 @@ function loadTweets(number, topic) {
 function getTweets(){
   $('#search-btn').blur();
   var topic = $('#search-box').val();
-  loadTweets(10);
+  loadTweets(10, topic);
   return false;
 }

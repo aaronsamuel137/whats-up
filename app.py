@@ -3,7 +3,7 @@ import tornado.web
 import os.path
 import json
 
-from tweets import get_tweets
+from tweets import get_tweets, get_tweets_by_topic
 from multiprocessing import Process, Pipe, Queue
 from tornado.options import parse_command_line, define, options
 
@@ -49,6 +49,14 @@ class APIHandler(tornado.web.RequestHandler):
             return
         topic = self.get_argument('topic', default='')
 
+        # use the rest API when searching by topic
+        if topic != '':
+            response = get_tweets_by_topic(topic)
+            tweets = [tweet['text'] for tweet in response['statuses'] if self.filter_tweet(tweet)]
+            self.write(json.dumps(tweets))
+            return
+
+        # use the streaming API when searching by in general
         tweets = []
         while len(tweets) < number:
             tweet = self.pipe.recv()
