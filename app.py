@@ -9,7 +9,10 @@ from tornado.options import parse_command_line, define, options
 
 # optional commandline args and default values
 define('port', default=8888)
-define('debug', default=True)
+define('debug', default=False)
+
+# filter out tweets with these words
+STOP_WORDS = ['fuck', 'bitch', 'shit', 'cunt', 'nigga']
 
 
 # Handler for main page
@@ -49,11 +52,18 @@ class APIHandler(tornado.web.RequestHandler):
         tweets = []
         while len(tweets) < number:
             tweet = self.pipe.recv()
-            if 'text' in tweet and len(tweet['text']) > 0:
-                tweets.append(tweet)
-            else:
-                print(tweet)
+            if self.filter_tweet(tweet):
+                tweets.append(tweet['text'])
+
         self.write(json.dumps(tweets))
+
+    def filter_tweet(self, tweet):
+        if 'text' not in tweet: return False
+        if 'lang' in tweet and tweet['lang'] != 'en': return False
+        if 'possibly_sensitive' in tweet and tweet['possibly_sensitive'] == True: return False
+        if any(word in tweet['text'] for word in STOP_WORDS): return False
+        return True
+
 
 # add the templates directory and static directory to application settings
 settings = dict(template_path=os.path.join(os.path.dirname(__file__), 'templates'),

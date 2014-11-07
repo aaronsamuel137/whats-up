@@ -14,11 +14,11 @@ function loadTweets(number, topic) {
     url: query
   }).then(function(data) {
     data = $.parseJSON(data);
-    // console.log(data[0]);
+    console.log(data[0]);
 
     $('#tweet-listing').empty();
     for (var i = 0; i < data.length; i++) {
-      $('#tweet-listing').append($('<li/>').append(JSON.stringify(data[i].text)));
+      $('#tweet-listing').append($('<li/>').append(data[i]));
     }
   });
 };
