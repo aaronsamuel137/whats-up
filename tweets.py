@@ -2,6 +2,17 @@ from twython import Twython
 from twython import TwythonStreamer
 import time
 
+# auth info for twitter
+appKeyFile = open('appKey.txt', 'r')
+APP_KEY = appKeyFile.readline().rstrip()
+APP_SECRET = appKeyFile.readline().rstrip()
+OAUTH_TOKEN = appKeyFile.readline().rstrip()
+OAUTH_TOKEN_SECRET = appKeyFile.readline().rstrip()
+
+# twython object for rest API calls
+twitter = Twython(APP_KEY, APP_SECRET, oauth_version=1)
+
+
 def get_tweets(pipe, queue):
     """This method defines a process that gets tweets from the Twitter streaming API.
 
@@ -13,33 +24,20 @@ def get_tweets(pipe, queue):
     stream = MyStreamer(pipe, queue)
     stream.statuses.sample()
 
-"""    num = 0
-    while (True):
-        tweets = ['example tweet {}'.format(str(i)) for i in range(num, num + 10)]
-        pipe.send(tweets)
-        num += 10
-        time.sleep(5)
-"""
+def get_tweets_by_topic(topic):
+    return twitter.search(q=topic, result_type='popular', lang='en')
 
-appKeyFile = open("appKey.txt", "r")
-APP_KEY = appKeyFile.readline().rstrip()
-APP_SECRET = appKeyFile.readline().rstrip()
-
-#twitter = Twython(APP_KEY, APP_SECRET, oauth_version=1)
-#auth = twitter.get_authorized_tokens()
-OAUTH_TOKEN = appKeyFile.readline().rstrip()#auth['oauth_token']
-OAUTH_TOKEN_SECRET = appKeyFile.readline().rstrip()#auth['oauth_token_secret']
-
-samples = open("samples.txt", "w")
 
 class MyStreamer(TwythonStreamer):
-    
+    """MyStreamer pipes the streaming twitter data to the main app."""
+
     def on_success(self, data):
         self.pipe.send(data)
         self.q.put(data)
 
     def on_error(self, status_code, data):
         print(status_code)
+        print(data)
 
         # Want to stop trying to get data because of the error?
         # Uncomment the next line!
