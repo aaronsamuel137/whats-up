@@ -22,7 +22,7 @@ def get_tweets(pipe, queue):
 
     """
     stream = MyStreamer(pipe, queue)
-    stream.statuses.sample()
+    # stream.statuses.sample()
 
 def get_tweets_by_topic(topic):
     return twitter.search(q=topic, result_type='recent', lang='en', count='100')

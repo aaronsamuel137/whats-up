@@ -11,15 +11,26 @@
 
 {% block content %}
 
-<div class="form-group">
-  <input id="search-box" type="search" placeholder="Search for a topic" class="form-control">
+<div class="row">
+	<div class="col-md-3"></div>
+	<div class="col-md-6">
+		<div class="form-group">
+			<input id="search-box" type="search" placeholder="Search for a topic" class="form-control">
+		</div>
+		<button id="search-btn" class="btn btn-success" onclick="getTweets();">Go</button>
+	</div>
+	<div class="col-md-3"></div>
 </div>
-<button id="search-btn" class="btn btn-success" onclick="getTweets();">Go</button>
 
 <div id="spinner"></div>
 
-<ul id="tweet-listing">
-</ul>
+<div class="row">
+	<div class="col-md-3"></div>
+	<div class="col-md-6">
+		<ul id="tweet-listing"></ul>
+	</div>
+	<div class="col-md-3"></div>
+</div>
 
 {% end %}
 
