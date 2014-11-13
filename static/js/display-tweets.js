@@ -10,9 +10,12 @@ $(document).ready(function() {
  */
 function loadTweets(number, topic) {
   var query = '/data?number=' + number + '&' + 'topic=' + topic;
+  $('#tweet-listing').empty();
+  $('#spinner').append('<img src="/static/img/ajax-loader.gif">')
   $.ajax({
     url: query
   }).then(function(data) {
+    $('#spinner').empty();
     data = $.parseJSON(data);
     console.log(data[0]);
 
