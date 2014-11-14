@@ -15,7 +15,7 @@ def hasRepeats(document):
 # features for the classifier
 # all features should return a boolean
 all_features = {
-    'hasGood': lambda document: any(word in 'good', 'awesome', 'wonderful'] for word in document.split()),
+    'hasGood': lambda document: any(word in ['good', 'awesome', 'wonderful'] for word in document.split()),
     'hasBad': lambda document: any(word in ['bad', 'terrible', 'horrible'] for word in document.split()),
     'hasHappy': lambda document: 'happ' in document,
     'hasSad': lambda document: 'sad' in document,
