@@ -1,8 +1,8 @@
 h1 {
   text-align: center;
 }
-ul { 
-  list-style: none; 
+ul {
+  list-style: none;
   padding-left: 0;
   /*text-align: center;  */
 }
@@ -19,4 +19,8 @@ ul {
 }
 #tweet-listing li:first-child {
   margin-top: 30px;
+}
+
+.sentiment {
+  color: red;
 }

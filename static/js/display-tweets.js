@@ -21,7 +21,7 @@ function loadTweets(number, topic) {
 
     $('#tweet-listing').empty();
     for (var i = 0; i < data.length; i++) {
-      $('#tweet-listing').append($('<li/>').append(data[i]));
+      $('#tweet-listing').append($('<li/>').append(data[i].text + '<br><span class="sentiment" >' + data[i].sentiment + '</span>'));
     }
   });
 };
