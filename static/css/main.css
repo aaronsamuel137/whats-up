@@ -1,3 +1,22 @@
 h1 {
   text-align: center;
 }
+ul { 
+  list-style: none; 
+  padding-left: 0;
+  /*text-align: center;  */
+}
+#tweet-listing li{
+  margin-bottom: 20px;
+  background-color: #EBEBEB;
+  font-family: Verdana, Helvetica, sans-serif;
+  font-size: 12px;
+  padding: 15px;
+  width: fill;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+}
+#tweet-listing li:first-child {
+  margin-top: 30px;
+}

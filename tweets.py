@@ -26,7 +26,7 @@ def get_tweets(pipe, queue, manager):
       pipe (multiprocessing.Pipe): The sending end of a Pipe object
     """
     stream = MyStreamer(pipe, queue, manager)
-    stream.statuses.sample()
+    #stream.statuses.sample()
 
 def get_tweets_by_topic(topic):
     return twitter.search(q=topic, result_type='recent', lang='en', count='100')
