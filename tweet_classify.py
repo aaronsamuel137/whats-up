@@ -15,30 +15,48 @@ def hasRepeats(document):
 # features for the classifier
 # all features should return a boolean
 all_features = {
-    'hasGood': lambda document: any(word in ['good', 'awesome', 'wonderful'] for word in document),
-    'hasBad': lambda document: any(word in ['bad', 'terrible', 'horrible'] for word in document),
+    'hasGood': lambda document: any(word in 'good', 'awesome', 'wonderful'] for word in document.split()),
+    'hasBad': lambda document: any(word in ['bad', 'terrible', 'horrible'] for word in document.split()),
     'hasHappy': lambda document: 'happ' in document,
     'hasSad': lambda document: 'sad' in document,
-    'hasLove': lambda document: 'love' in document,
+    'hasLove': lambda document: 'love' in document or 'loving' in document,
     'hasHate': lambda document: 'hate' in document,
-    'hasSmiley': lambda document: any(word in [':)', ':D', '(:'] for word in document),
-    'hasWinky': lambda document: any(word in [';)', ';D'] for word in document),
-    'hasFrowny': lambda document: any(word in [':(', '):', 'D:', ':.('] for word in document),
+    'hasSmiley': lambda document: any(word in [':)', ':D', '(:'] for word in document.split()),
+    'hasWinky': lambda document: any(word in [';)', ';D'] for word in document.split()),
+    'hasFrowny': lambda document: any(word in [':(', '):', 'D:', ':.('] for word in document.split()),
     'hasBest': lambda document: 'best' in document,
     'hasWorst': lambda document: 'worst' in document,
-    'hasDont': lambda document: any(word in ['dont','don\'t','do not','does not','doesn\'t'] for word in document),
+    'hasDont': lambda document: any(word in ['dont','don\'t','do not','does not','doesn\'t'] for word in document.split()),
     'hasExclamation': lambda document: '!' in document,
     'hasRepeats': lambda document: hasRepeats(document),
-    'hasHeart': lambda document: '<3' in document,
-    'hasCant': lambda document: any(word in ['cant','can\'t','can not'] for word in document),
-    'hasExpense': lambda document: any(word in ['expensive', 'expense'] for word in document),
-    'hasFavorite': lambda document: 'favorite' in document
+    'hasHeart': lambda document: any(word in ['<3', '&lt;3'] for word in document.split()),
+    'hasCant': lambda document: any(word in ['cant','can\'t','can not'] for word in document.split()),
+    'hasExpense': lambda document: any(word in ['expensive', 'expense'] for word in document.split()),
+    'hasFavorite': lambda document: 'favorite' in document,
+    'hasFantastic': lambda document: 'fantastic' in document,
+    'hasFuck': lambda document: 'fuck' in document,
+    'hasFriend': lambda document: any(word in ['bff', 'friend'] for word in document.split()),
+    'hasLol': lambda document: 'lol' in document,
+    'hasHaha': lambda document: 'haha' in document,
+    'hasGreat': lambda document: 'great' in document,
+    'hasNo': lambda document: 'no' in document.split(),
+    'hasYes': lambda document: 'yes' in document.split(),
+    'hasCold': lambda document: 'hot' in document.split(),
+    'hasHot': lambda document: 'cold' in document.split(),
+    'hasFree': lambda document: 'free' in document,
+    'hasImprove': lambda document: 'improve' in document,
+    'hasFail': lambda document: 'fail' in document,
+    'hasSweet': lambda document: 'sweet' in document,
+    'hasNew': lambda document: 'new' in document.split(),
+    'hasCurse': lambda document: 'curse' in document,
+    'hasFunny': lambda document: any(word in ['funny', 'hilarious', 'silly'] for word in document.split()),
+    'hasLoss': lambda document: any(word in ['lost', 'loss'] for word in document.split()),
 }
 
 def extract_features(document):
     features = {}
     for feature, function in all_features.items():
-        features[feature] = function(document)
+        features[feature] = function(document.lower())
     return features
 
 def main():
@@ -52,7 +70,6 @@ def main():
 
     training_set = nltk.classify.apply_features(extract_features, data)
     classifier = nltk.NaiveBayesClassifier.train(training_set)
-    classifier.show_most_informative_features(32)
 
     # read in test data
     fp = open('trainingandtestdata/testdata.manual.2009.06.14.csv', 'rb')
@@ -69,5 +86,7 @@ def main():
         print(tweet[0] + ':\t' + classification)
 
     print(str(float(num_correct) / len(data)) + '% accuracy')
+
+    classifier.show_most_informative_features(32)
 
 main()
