@@ -3,8 +3,10 @@ import tornado.web
 import tornado.escape
 import os.path
 import json
+import pickle
 
 from tweets import get_tweets, get_tweets_by_topic
+from tweet_classify import extract_features
 from multiprocessing import Process, Pipe, Queue, Manager
 from tornado.options import parse_command_line, define, options
 
@@ -50,6 +52,9 @@ class HashtagHandler(tornado.web.RequestHandler):
 class APIHandler(tornado.web.RequestHandler):
     def initialize(self, pipe, queue):
         self.pipe = pipe
+        f = open('my_classifier.pickle')
+        self.classifier = pickle.load(f)
+        f.close()
 
     def get(self):
         # parse the query string to get the number of tweets to display, default is 10
@@ -63,7 +68,10 @@ class APIHandler(tornado.web.RequestHandler):
         # use the rest API when searching by topic
         if topic != '':
             response = get_tweets_by_topic(topic)
-            tweets = [tweet['text'] for tweet in response['statuses'] if self.filter_tweet(tweet)]
+            tweets = []
+            for tweet in response['statuses']:
+                if self.filter_tweet(tweet):
+                    tweets.append({'text': tweet['text'], 'sentiment': self.classifier.classify(extract_features(tweet['text']))})
             self.write(json.dumps(tweets))
             return
 

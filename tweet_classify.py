@@ -1,5 +1,8 @@
 import nltk
 import csv
+import pickle
+
+SENTIMENT_MAP = {'0': 'negative', '2': 'neutral', '4': 'positive'}
 
 def hasRepeats(document):
     """Returns True is more than 3 consecutive letters are the same in document."""
@@ -21,7 +24,7 @@ all_features = {
     'hasSad': lambda document: 'sad' in document,
     'hasLove': lambda document: 'love' in document or 'loving' in document,
     'hasHate': lambda document: 'hate' in document,
-    'hasSmiley': lambda document: any(word in [':)', ':D', '(:'] for word in document.split()),
+    'hasSmiley': lambda document: any(word in [':)', ':D', '(:', '=)', '(='] for word in document.split()),
     'hasWinky': lambda document: any(word in [';)', ';D'] for word in document.split()),
     'hasFrowny': lambda document: any(word in [':(', '):', 'D:', ':.('] for word in document.split()),
     'hasBest': lambda document: 'best' in document,
@@ -34,9 +37,10 @@ all_features = {
     'hasExpense': lambda document: any(word in ['expensive', 'expense'] for word in document.split()),
     'hasFavorite': lambda document: 'favorite' in document,
     'hasFantastic': lambda document: 'fantastic' in document,
-    'hasFuck': lambda document: 'fuck' in document,
+    'hasFuck': lambda document: 'fuck' in document or 'f*ck' in document,
     'hasFriend': lambda document: any(word in ['bff', 'friend'] for word in document.split()),
-    'hasLol': lambda document: 'lol' in document,
+    'hasAche': lambda document: any(word in ['ache', 'aching'] for word in document.split()),
+    'hasLol': lambda document: any(word in ['lol', 'lmao'] for word in document.split()),
     'hasHaha': lambda document: 'haha' in document,
     'hasGreat': lambda document: 'great' in document,
     'hasNo': lambda document: 'no' in document.split(),
@@ -47,7 +51,18 @@ all_features = {
     'hasImprove': lambda document: 'improve' in document,
     'hasFail': lambda document: 'fail' in document,
     'hasSweet': lambda document: 'sweet' in document,
+    'hasSuck': lambda document: 'suck' in document,
+    'hasCool': lambda document: 'cool' in document,
+    'hasPay': lambda document: 'pay' in document,
+    'hasFast': lambda document: 'fast' in document,
+    'hasCheap': lambda document: 'cheap' in document,
+    'hasPlay': lambda document: 'play' in document,
+    'hasIdiot': lambda document: 'idiot' in document,
+    'hasUgh': lambda document: 'ugh' in document,
+    'hasWtf': lambda document: 'wtf' in document,
     'hasNew': lambda document: 'new' in document.split(),
+    'hasSmell': lambda document: 'smell' in document,
+    'hasAss': lambda document: 'ass' in document.split(),
     'hasCurse': lambda document: 'curse' in document,
     'hasFunny': lambda document: any(word in ['funny', 'hilarious', 'silly'] for word in document.split()),
     'hasLoss': lambda document: any(word in ['lost', 'loss'] for word in document.split()),
@@ -59,23 +74,24 @@ def extract_features(document):
         features[feature] = function(document.lower())
     return features
 
-def main():
-    # read in the tweet csv file with training data
-    sentiment_map = {'0': 'negative', '2': 'neutral', '4': 'positive'}
-    fp = open('trainingandtestdata/training.1600000.processed.noemoticon.csv', 'rb')
+def read_csv(filename):
+    fp = open(filename, 'rb')
     reader = csv.reader(fp, delimiter=',', quotechar='"', escapechar='\\')
+    return [(row[5], SENTIMENT_MAP[row[0]]) for row in reader]
 
-    data = [(row[5], sentiment_map[row[0]]) for row in reader]
+def train_classifier():
+    # read in the tweet csv file with training data
+    data = read_csv('trainingandtestdata/training.1600000.processed.noemoticon.csv')
     print('read ' + str(len(data)) + ' tweets for training the classifier')
 
     training_set = nltk.classify.apply_features(extract_features, data)
-    classifier = nltk.NaiveBayesClassifier.train(training_set)
+    return nltk.NaiveBayesClassifier.train(training_set)
+
+def main():
+    classifier = train_classifier()
 
     # read in test data
-    fp = open('trainingandtestdata/testdata.manual.2009.06.14.csv', 'rb')
-    reader = csv.reader(fp, delimiter=',', quotechar='"', escapechar='\\')
-    data = [(row[5], sentiment_map[row[0]]) for row in reader]
-
+    data = read_csv('trainingandtestdata/testdata.manual.2009.06.14.csv')
     print('read ' + str(len(data)) + ' tweets for testing the classifier')
 
     num_correct = 0
@@ -86,7 +102,10 @@ def main():
         print(tweet[0] + ':\t' + classification)
 
     print(str(float(num_correct) / len(data)) + '% accuracy')
-
     classifier.show_most_informative_features(32)
 
-main()
+    f = open('my_classifier.pickle', 'wb')
+    pickle.dump(classifier, f)
+    f.close()
+
+# main()
