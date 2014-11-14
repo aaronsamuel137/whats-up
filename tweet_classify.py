@@ -75,7 +75,7 @@ def extract_features(document):
     return features
 
 def read_csv(filename):
-    fp = open(filename, 'rb')
+    fp = open(filename, 'r')
     reader = csv.reader(fp, delimiter=',', quotechar='"', escapechar='\\')
     return [(row[5], SENTIMENT_MAP[row[0]]) for row in reader]
 
