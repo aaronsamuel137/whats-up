@@ -108,4 +108,5 @@ def main():
     pickle.dump(classifier, f)
     f.close()
 
-# main()
+if __name__ == '__main__':
+    main()
