@@ -1,10 +1,11 @@
 import tornado.ioloop
 import tornado.web
+import tornado.escape
 import os.path
 import json
 
 from tweets import get_tweets, get_tweets_by_topic
-from multiprocessing import Process, Pipe, Queue
+from multiprocessing import Process, Pipe, Queue, Manager
 from tornado.options import parse_command_line, define, options
 
 # optional commandline args and default values
@@ -34,6 +35,16 @@ class TrendingHandler(tornado.web.RequestHandler):
 class SentimentsHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('sentiments.html', title="Sentiments")
+
+# Handler for the live updating hashtag counts
+class HashtagHandler(tornado.web.RequestHandler):
+    def initialize(self, tag_map):
+        print("I was inited")
+        self.tag_map = tag_map
+
+    def get(self):
+        print("get is called")
+        self.write(json.dumps(dict(self.tag_map)))
 
 # Handler for our rest API
 class APIHandler(tornado.web.RequestHandler):
@@ -90,6 +101,10 @@ if __name__ == '__main__':
     parent_conn, child_conn = Pipe()
     tweet_queue  = Queue()
 
+    # Init the manager for the Hashtag map
+    manager = Manager()#multiprocessing.Manager()
+    hashtag_map = manager.dict()
+
     # handlers for every url go here
     handlers = [
         (r'/', MainHandler),
@@ -97,9 +112,10 @@ if __name__ == '__main__':
         (r'/about', AboutHandler),
         (r'/sentiments', SentimentsHandler),
         (r'/trending', TrendingHandler),
+        (r'/hashtagmap', HashtagHandler, dict(tag_map=hashtag_map)),
     ]
 
-    twitter_stream = Process(target=get_tweets, args=(child_conn, tweet_queue, ))
+    twitter_stream = Process(target=get_tweets, args=(child_conn, tweet_queue, hashtag_map,))
     twitter_stream.start()
 
     application = tornado.web.Application(handlers, debug=options.debug, **settings)
