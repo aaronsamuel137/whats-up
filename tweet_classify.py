@@ -5,7 +5,7 @@ import pickle
 SENTIMENT_MAP = {'0': 'negative', '2': 'neutral', '4': 'positive'}
 
 def hasRepeats(document):
-    """Returns True is more than 3 consecutive letters are the same in document."""
+    """Returns True if more than 3 consecutive letters are the same in document."""
     previous = ''
     two_previous = ''
     for letter in document:
@@ -24,9 +24,9 @@ all_features = {
     'hasSad': lambda document: 'sad' in document,
     'hasLove': lambda document: 'love' in document or 'loving' in document,
     'hasHate': lambda document: 'hate' in document,
-    'hasSmiley': lambda document: any(word in [':)', ':D', '(:', '=)', '(='] for word in document.split()),
+    'hasSmiley': lambda document: any(word in [':)', ':-)', ':D', '(:', '=)', '(='] for word in document.split()),
     'hasWinky': lambda document: any(word in [';)', ';D'] for word in document.split()),
-    'hasFrowny': lambda document: any(word in [':(', '):', 'D:', ':.('] for word in document.split()),
+    'hasFrowny': lambda document: any(word in [':(', ':-(', '):', 'D:', ':.('] for word in document.split()),
     'hasBest': lambda document: 'best' in document,
     'hasWorst': lambda document: 'worst' in document,
     'hasDont': lambda document: any(word in ['dont','don\'t','do not','does not','doesn\'t'] for word in document.split()),
@@ -65,7 +65,25 @@ all_features = {
     'hasAss': lambda document: 'ass' in document.split(),
     'hasCurse': lambda document: 'curse' in document,
     'hasFunny': lambda document: any(word in ['funny', 'hilarious', 'silly'] for word in document.split()),
-    'hasLoss': lambda document: any(word in ['lost', 'loss'] for word in document.split()),
+    'hasLoss': lambda document: any(word in ['lost', 'loss', 'lose'] for word in document.split()),
+    'hasWin': lambda document: any(word in['win', 'won'] for word in document.split()),
+    'hasOpportunity': lambda document: 'opportunity' in document,
+    'hasAwesome': lambda document: 'awesome' in document,
+    'hasConfident': lambda document: 'confident' in document,
+    'hasFun': lambda document: 'fun' in document,
+    'hasSuper': lambda document: 'super' in document,
+    'hasSmile': lambda document: 'smile' in document,
+    'hasWow': lambda document: 'wow' in document,
+    'hasScary': lambda document: 'scary' in document.split(),
+    'hasHurt': lambda document: 'hurt' in document,
+    'hasThanks': lambda document: any(word in ['thanks', 'thank you'] for word in document.split()),
+    'hasLike': lambda document: 'like' in document.split(),
+    'hasDislike': lambda document: 'dislike' in document.split(),
+    'hasSave': lambda document: 'save' in document,
+    'hasRocks': lambda document: any(word in ['rocks', 'rocked'] for word in document.split()),
+    'hasExcited': lambda document: any(word in ['excited', 'exciting'] for word in document.split()),
+    'hasRidiculous': lambda document: 'ridiculous' in document,
+
 }
 
 def extract_features(document):
