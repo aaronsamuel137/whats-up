@@ -20,7 +20,7 @@ def hasRepeats(document):
 all_features = {
     'hasGood': lambda document: any(word in ['good', 'awesome', 'wonderful'] for word in document.split()),
     'hasBad': lambda document: any(word in ['bad', 'terrible', 'horrible'] for word in document.split()),
-    'hasHappy': lambda document: 'happ' in document,
+    'hasHappy': lambda document: 'happy' in document or 'happi' in document,
     'hasSad': lambda document: 'sad' in document,
     'hasLove': lambda document: 'love' in document or 'loving' in document,
     'hasHate': lambda document: 'hate' in document,
