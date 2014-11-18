@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block head %}
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="/static/js/trending.js"></script>
 {% end %}
 
 {% block header %}
@@ -9,7 +12,16 @@
 
 {% block content %}
 <p class="lead">Trending topics on Twitter based on hashtags. </p>
-
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div id="spinner"></div>
+    <div id="chart_div"></div>
+  </div>
+  <div class="col-md-3">
+    <ul id="sentiment-listing"></ul>
+  </div>
+</div>
 {% end %}
 
 {% block footer %}
