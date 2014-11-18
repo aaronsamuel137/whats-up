@@ -21,6 +21,10 @@ ul {
   margin-top: 30px;
 }
 
-.sentiment {
+.neg-sentiment {
   color: red;
+}
+
+.pos-sentiment {
+  color: green;
 }
