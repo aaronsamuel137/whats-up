@@ -25,9 +25,9 @@ function loadTweets(number, topic) {
 
     for (var i = 0; i < data.length; i++) {
       if(data[i].sentiment=="negative")
-        $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br><span class="neg-sentiment" >' + data[i].sentiment + '</span>'));
+        $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br></span>'));
       else
-        $('#tweet-listing-pos').append($('<li/>').append(data[i].text + '<br><span class="pos-sentiment" >' + data[i].sentiment + '</span>'));
+        $('#tweet-listing-pos').append($('<li/>').append(data[i].text + '<br></span>'));
     }
   });
 };

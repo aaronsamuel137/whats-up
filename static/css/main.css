@@ -21,10 +21,10 @@ ul {
   margin-top: 30px;
 }
 
-.neg-sentiment {
+#neg-header {
   color: red;
 }
 
-.pos-sentiment {
+#pos-header {
   color: #04B822;
 }
