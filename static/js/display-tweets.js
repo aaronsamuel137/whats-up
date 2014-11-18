@@ -22,9 +22,9 @@ function loadTweets(number, topic) {
     $('#tweet-listing').empty();
     for (var i = 0; i < data.length; i++) {
       if(data[i].sentiment=="negative")
-        $('#tweet-listing').append($('<li/>').append(data[i].text + '<br><span class="neg-sentiment" >' + data[i].sentiment + '</span>'));
+        $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br><span class="neg-sentiment" >' + data[i].sentiment + '</span>'));
       else
-        $('#tweet-listing').append($('<li/>').append(data[i].text + '<br><span class="pos-sentiment" >' + data[i].sentiment + '</span>'));
+        $('#tweet-listing-pos').append($('<li/>').append(data[i].text + '<br><span class="pos-sentiment" >' + data[i].sentiment + '</span>'));
     }
   });
 };
