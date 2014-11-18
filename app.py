@@ -56,7 +56,7 @@ class HashtagHandler(tornado.web.RequestHandler):
 class APIHandler(tornado.web.RequestHandler):
     def initialize(self, tweet_queue):
         self.tweet_queue = tweet_queue
-        f = open('my_classifier.pickle')
+        f = open('my_classifier.pickle', 'rb')
         self.classifier = pickle.load(f)
         f.close()
 

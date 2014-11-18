@@ -4,6 +4,8 @@ __pycache__/
 
 .DS_Store
 appKey.txt
+trainingandtestdata/
+trainingandtestdata.zip
 
 # C extensions
 *.so
