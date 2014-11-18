@@ -45,8 +45,9 @@ class MyStreamer(TwythonStreamer):
                 self.hashtag_map[tag['text']] = 1
             try:
                 self.q.get_nowait()
-            except:
-                pass
+            except Exception as e:
+                print('exception')
+                print(e)
             # File of the current map for testing purposes
             #hashtagFile = open("HashtagTestingFile.txt", "w")
             #map_string = json.dumps(dict(self.hashtag_map))
