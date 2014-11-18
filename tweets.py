@@ -25,7 +25,7 @@ def get_tweets(tweet_queue, hashtag_queue):
     """
     stream = MyStreamer(tweet_queue, hashtag_queue)
 
-    # stream.statuses.sample() #comment out for front end testing
+    stream.statuses.sample() #comment out for front end testing
 
 
 def get_tweets_by_topic(topic):
