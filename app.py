@@ -52,7 +52,7 @@ class HashtagHandler(tornado.web.RequestHandler):
 class APIHandler(tornado.web.RequestHandler):
     def initialize(self, pipe, queue):
         self.pipe = pipe
-        f = open('my_classifier.pickle')
+        f = open('my_classifier.pickle', 'rb')
         self.classifier = pickle.load(f)
         f.close()
 
