@@ -20,6 +20,9 @@ function loadTweets(number, topic) {
     console.log(data[0]);
 
     $('#tweet-listing').empty();
+    $('#neg-header').append($('<h3>Negative</h3>'));
+    $('#pos-header').append($('<h3>Positive</h3>'));
+
     for (var i = 0; i < data.length; i++) {
       if(data[i].sentiment=="negative")
         $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br><span class="neg-sentiment" >' + data[i].sentiment + '</span>'));
