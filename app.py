@@ -4,6 +4,7 @@ import tornado.escape
 import os.path
 import json
 import pickle
+import sys
 
 from tweets import get_tweets, get_tweets_by_topic
 from tweet_classify import extract_features
@@ -40,18 +41,21 @@ class SentimentsHandler(tornado.web.RequestHandler):
 
 # Handler for the live updating hashtag counts
 class HashtagHandler(tornado.web.RequestHandler):
-    def initialize(self, tag_map):
-        print("I was inited")
-        self.tag_map = tag_map
+    def initialize(self, tag_queue):
+        self.tag_queue = tag_queue
+        self.tag_map = "{}"
 
-    def get(self):
-        print("get is called")
-        self.write(json.dumps(dict(self.tag_map)))
+    def get(self):        
+        try:
+            self.tag_map = json.dumps(dict(self.tag_queue.get(True, 2)))
+        except:
+            print(sys.exc_info()[0])
+        self.write(self.tag_map)
 
 # Handler for our rest API
 class APIHandler(tornado.web.RequestHandler):
-    def initialize(self, pipe, queue):
-        self.pipe = pipe
+    def initialize(self, tweet_queue):
+        self.tweet_queue = tweet_queue
         f = open('my_classifier.pickle')
         self.classifier = pickle.load(f)
         f.close()
@@ -78,7 +82,7 @@ class APIHandler(tornado.web.RequestHandler):
         # use the streaming API when searching by in general
         tweets = []
         while len(tweets) < number:
-            tweet = self.pipe.recv()
+            tweet = self.tweet_queue.get(True, 2)
             if self.filter_tweet(tweet):
                 tweets.append(tweet['text'])
 
@@ -106,24 +110,21 @@ if __name__ == '__main__':
         print('running app in debug mode')
 
     # pipe for piping data from the twitter stream process
-    parent_conn, child_conn = Pipe()
-    tweet_queue  = Queue()
-
-    # Init the manager for the Hashtag map
-    manager = Manager()#multiprocessing.Manager()
-    hashtag_map = manager.dict()
+    #parent_conn, child_conn = Pipe()
+    tweet_queue = Queue()
+    hashtag_queue  = Queue()
 
     # handlers for every url go here
     handlers = [
         (r'/', MainHandler),
-        (r'/data', APIHandler, dict(pipe=parent_conn, queue=tweet_queue)),
+        (r'/data', APIHandler, dict(tweet_queue=tweet_queue)),
         (r'/about', AboutHandler),
         (r'/sentiments', SentimentsHandler),
         (r'/trending', TrendingHandler),
-        (r'/hashtagmap', HashtagHandler, dict(tag_map=hashtag_map)),
+        (r'/hashtagmap', HashtagHandler, dict(tag_queue=hashtag_queue)),
     ]
 
-    twitter_stream = Process(target=get_tweets, args=(child_conn, tweet_queue, hashtag_map,))
+    twitter_stream = Process(target=get_tweets, args=(tweet_queue, hashtag_queue,))
     twitter_stream.start()
 
     application = tornado.web.Application(handlers, debug=options.debug, **settings)

@@ -1,11 +1,8 @@
 from twython import Twython
 from twython import TwythonStreamer
-from multiprocessing import Manager
+from multiprocessing import Queue
 import time
-
-# the hashtag dictionary
-#process_comm_list = manager.list()
-#process_comm_list.append({})
+import json
 
 # auth info for twitter
 appKeyFile = open('appKey.txt', 'r')
@@ -18,15 +15,16 @@ OAUTH_TOKEN_SECRET = appKeyFile.readline().rstrip()
 twitter = Twython(APP_KEY, APP_SECRET, oauth_version=1)
 
 
-def get_tweets(pipe, queue, manager):
+def get_tweets(tweet_queue, hashtag_queue):
     """
     This method defines a process that gets tweets from the Twitter streaming API.
 
     Args:
       pipe (multiprocessing.Pipe): The sending end of a Pipe object
+      queue (multiprocessing.Queue): The object for sending the hashtag map back
     """
-    stream = MyStreamer(pipe, queue, manager)
-    #stream.statuses.sample()
+    stream = MyStreamer(tweet_queue, hashtag_queue)
+    stream.statuses.sample()
 
 def get_tweets_by_topic(topic):
     return twitter.search(q=topic, result_type='recent', lang='en', count='100')
@@ -39,16 +37,32 @@ class MyStreamer(TwythonStreamer):
         if not 'entities' in data or not 'hashtags' in data['entities']:
             return
         for tag in data['entities']['hashtags']:
-            #print(tag)
             if tag['text'] in self.hashtag_map:
                 self.hashtag_map[tag['text']] += 1
             else:
                 self.hashtag_map[tag['text']] = 1
+            try:
+                self.q.get_nowait()
+            except:
+                pass
+            # File of the current map for testing purposes
+            #hashtagFile = open("HashtagTestingFile.txt", "w")
+            #map_string = json.dumps(dict(self.hashtag_map))
+            #hashtagFile.write(map_string)
+            #hashtagFile.close()
+            self.q.put(self.hashtag_map)
+
+    def send_tweet(self, data):
+        if self.tweet_queue.full():
+            try:
+                self.tweet_queue.get_nowait()
+            except:
+                pass
+        self.tweet_queue.put(data, True, 2)
 
     def on_success(self, data):
         self.add_hashtags_to_map(data)
-        self.pipe.send(data)
-        self.q.put(data)
+        self.send_tweet(data)
 
     def on_error(self, status_code, data):
         print(status_code)
@@ -58,10 +72,8 @@ class MyStreamer(TwythonStreamer):
         # Uncomment the next line!
         self.disconnect()
 
-    def __init__(self, pipe, queue, hashtag_map):
+    def __init__(self, tweet_queue, hashtag_queue):
         TwythonStreamer.__init__(self, APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-        self.pipe = pipe
-        self.q = queue
-        self.hashtag_map = hashtag_map
-
-
+        self.tweet_queue = tweet_queue
+        self.q = hashtag_queue
+        self.hashtag_map = {}
