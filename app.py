@@ -47,7 +47,9 @@ class HashtagHandler(tornado.web.RequestHandler):
 
     def get(self):        
         try:
-            self.tag_map = json.dumps(dict(self.tag_queue.get(True, 2)))
+            hashtag_dict = self.tag_queue.get(True, 2)
+            sorted_list_key_value_pair = [{'tag':key,'count':value} for key,value in sorted(hashtag_dict.items(), key=lambda a:a[-1], reverse=True)]
+            self.tag_map = json.dumps(sorted_list_key_value_pair)
         except:
             print(sys.exc_info()[0])
         self.write(self.tag_map)
