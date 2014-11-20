@@ -1,9 +1,3 @@
-import nltk
-import csv
-import pickle
-
-SENTIMENT_MAP = {'0': 'negative', '2': 'neutral', '4': 'positive'}
-
 def hasRepeats(document):
     """Returns True if more than 3 consecutive letters are the same in document."""
     previous = ''
@@ -125,40 +119,3 @@ def extract_features(document):
     for feature, function in all_features.items():
         features[feature] = function(document.lower())
     return features
-
-def read_csv(filename):
-    fp = open(filename, 'r')
-    reader = csv.reader(fp, delimiter=',', quotechar='"', escapechar='\\')
-    return [(row[5], SENTIMENT_MAP[row[0]]) for row in reader]
-
-def train_classifier():
-    # read in the tweet csv file with training data
-    data = read_csv('trainingandtestdata/training.1600000.processed.noemoticon.csv')
-    print('read ' + str(len(data)) + ' tweets for training the classifier')
-
-    training_set = nltk.classify.apply_features(extract_features, data)
-    return nltk.NaiveBayesClassifier.train(training_set)
-
-def main():
-    classifier = train_classifier()
-
-    # read in test data
-    data = read_csv('trainingandtestdata/testdata.manual.2009.06.14.csv')
-    print('read ' + str(len(data)) + ' tweets for testing the classifier')
-
-    num_correct = 0
-    for tweet in data:
-        classification = classifier.classify(extract_features(tweet[0]))
-        if classification == tweet[1]:
-            num_correct +=1
-        print(tweet[0] + ':\t' + classification)
-
-    print(str(float(num_correct) / len(data)) + '% accuracy')
-    classifier.show_most_informative_features(32)
-
-    f = open('my_classifier.pickle', 'wb')
-    pickle.dump(classifier, f)
-    f.close()
-
-if __name__ == '__main__':
-    main()

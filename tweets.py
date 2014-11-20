@@ -24,13 +24,10 @@ def get_tweets(tweet_queue, hashtag_queue):
       queue (multiprocessing.Queue): The object for sending the hashtag map back
     """
     stream = MyStreamer(tweet_queue, hashtag_queue)
-
-    # stream.statuses.sample() #comment out for front end testing
-
+    stream.statuses.sample() #comment out for front end testing
 
 def get_tweets_by_topic(topic):
     return twitter.search(q=topic, result_type='recent', lang='en', count='100')
-
 
 class MyStreamer(TwythonStreamer):
     """MyStreamer pipes the streaming twitter data to the main app."""
