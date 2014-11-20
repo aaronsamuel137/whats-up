@@ -25,7 +25,7 @@ def get_tweets(tweet_queue, hashtag_queue):
     """
     stream = MyStreamer(tweet_queue, hashtag_queue)
 
-    # stream.statuses.sample() #comment out for front end testing
+    #stream.statuses.sample() #comment out for front end testing
 
 
 def get_tweets_by_topic(topic):
@@ -80,3 +80,19 @@ class MyStreamer(TwythonStreamer):
         self.tweet_queue = tweet_queue
         self.q = hashtag_queue
         self.hashtag_map = {}
+        
+    def prune(self):
+        # Determine when it is time to cut out an entry in the map
+        max_value = max(self.hashtag_map.values())
+        cutoff_fraction = 0.25
+        cutoff_value = max_value * cutoff_fraction
+
+        # Remove entries where the value is too small
+        keys_to_remove = []
+        for key, value in self.hashtag_map.items():
+            if cutoff_value > value:
+                keys_to_remove.append(key)
+
+        for key in keys_to_remove:
+            del self.hashtag_map[key]
+    
