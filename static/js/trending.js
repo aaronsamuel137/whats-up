@@ -33,7 +33,7 @@ function drawChart(hashtags) {
     if (i > hashtags.length) {
       break;
     }
-    data.addRow([hashtags[i].tag, hashtags[i].count]);
+    data.addRow("#"+[hashtags[i].tag, hashtags[i].count]);
   }
 
   var options = {height: 600};
