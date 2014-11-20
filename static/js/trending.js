@@ -34,10 +34,10 @@ function drawChart(hashtags) {
     if (i > hashtags.length) {
       break;
     }
-    data.addRow([hashtags[i].tag, hashtags[i].count]);
+    data.addRow(['#' + hashtags[i].tag, hashtags[i].count]);
   }
 
-  var options = {height: 600};
+  var options = {height: 400};
   var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
   chart.draw(data, options);
 }
