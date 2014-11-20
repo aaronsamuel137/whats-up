@@ -3,6 +3,7 @@ from twython import TwythonStreamer
 from multiprocessing import Queue
 import time
 import json
+import redis
 
 # auth info for twitter
 appKeyFile = open('appKey.txt', 'r')
@@ -13,7 +14,6 @@ OAUTH_TOKEN_SECRET = appKeyFile.readline().rstrip()
 
 # twython object for rest API calls
 twitter = Twython(APP_KEY, APP_SECRET, oauth_version=1)
-
 
 def get_tweets(tweet_queue, hashtag_queue):
     """
@@ -36,21 +36,10 @@ class MyStreamer(TwythonStreamer):
         if not 'entities' in data or not 'hashtags' in data['entities']:
             return
         for tag in data['entities']['hashtags']:
-            if tag['text'] in self.hashtag_map:
-                self.hashtag_map[tag['text']] += 1
+            if self.r_server.exists(tag['text']):
+                self.r_server.incr(tag['text'])
             else:
-                self.hashtag_map[tag['text']] = 1
-            try:
-                self.q.get_nowait()
-            except Exception as e:
-                print('exception')
-                print(e)
-            # File of the current map for testing purposes
-            #hashtagFile = open("HashtagTestingFile.txt", "w")
-            #map_string = json.dumps(dict(self.hashtag_map))
-            #hashtagFile.write(map_string)
-            #hashtagFile.close()
-            self.q.put(self.hashtag_map)
+                self.r_server.set(tag['text'], 1)
 
     def send_tweet(self, data):
         if self.tweet_queue.full():
@@ -76,4 +65,4 @@ class MyStreamer(TwythonStreamer):
         TwythonStreamer.__init__(self, APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
         self.tweet_queue = tweet_queue
         self.q = hashtag_queue
-        self.hashtag_map = {}
+        self.r_server = redis.Redis('localhost')
