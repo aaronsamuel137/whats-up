@@ -17,12 +17,11 @@ function drawChart(hashtags) {
 
   if (hashtags.length === 0) {
     hashtags = [
-      {tag: 'Mushrooms', count: 3},
-      {tag: 'Onions', count: 1},
-      {tag: 'Olives', count: 1},
-      {tag: 'Zucchini', count: 1},
-      {tag: 'Pepperoni', count: 2},
-      {tag: 'Misc', count: 0}
+      {tag: '#mtvstars', count: 100},
+      {tag: '#AMAs', count: 80},
+      {tag: '#RT', count: 75},
+      {tag: '#android', count: 60},
+      {tag: '#love', count: 60}
     ];
   }
 
