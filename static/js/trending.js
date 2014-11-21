@@ -37,7 +37,7 @@ function drawChart(hashtags) {
   }
 
   var options = {height: 600};
-  var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+  var chart = new google.visualization.BarChart(document.getElementById('chart-div'));
   chart.draw(data, options);
 }
 

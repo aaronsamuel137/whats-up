@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block head %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="/static/js/display-tweets.js"></script>
 <script type="text/javascript" src="/static/js/enter-to-submit.js"></script>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 {% end %}
 
 {% block header %}
@@ -24,11 +24,13 @@
 </div>
 
 <div id="spinner"></div>
+
 <div class="row">
 	<div class="col-md-4"></div>
 	<div class="col-md-4">
-    	<div id="chart_div"></div>
-    </div>
+		<br/>
+		<div id="chart-div"></div>
+	</div>
 	<div class="col-md-4"></div>
 </div>
 

@@ -44,8 +44,39 @@ $(document).ready(function() {
     $('#neg-count').append($('<h3>').append(counterNeg).append('</h3>'));
     $('#pos-count').append($('<h3>').append(counterPos).append('</h3>'));
 
+    $('#chart-div').empty();
+    drawChart(counterPos, counterNeg);
+
   });
 };
+
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(drawChart);
+function drawChart(counterPos, counterNeg) {
+
+  var data = google.visualization.arrayToDataTable([
+    ['Sentiment', 'Number of tweets'],
+    ['Negative', counterNeg],
+    ['Positive', counterPos]
+    ]);
+
+  var options = {
+    title: 'Sentiment Analysis',
+    width: 500,
+    slices: {
+      1: { color: '#01A9DB' },
+      0: { color: '#0431B4' }
+    },
+    titleTextStyle: {
+      fontSize: 20
+    }
+
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('chart-div'));
+
+  chart.draw(data, options);
+}
 
 function getTweets(){
   $('#search-btn').blur();
