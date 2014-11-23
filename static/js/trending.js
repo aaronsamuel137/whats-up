@@ -15,15 +15,13 @@ function drawChart(hashtags) {
   data.addColumn('string', 'Hashtag');
   data.addColumn('number', 'Number of Tweets');
 
-  hashtags = [];
   if (hashtags.length === 0) {
     hashtags = [
-      {tag: 'Mushrooms', count: 3},
-      {tag: 'Onions', count: 1},
-      {tag: 'Olives', count: 1},
-      {tag: 'Zucchini', count: 1},
-      {tag: 'Pepperoni', count: 2},
-      {tag: 'Misc', count: 0}
+      {tag: '#mtvstars', count: 100},
+      {tag: '#AMAs', count: 80},
+      {tag: '#RT', count: 75},
+      {tag: '#android', count: 60},
+      {tag: '#love', count: 60}
     ];
   }
 
@@ -31,15 +29,16 @@ function drawChart(hashtags) {
     return b.count - a.count;
   });
 
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 10; i++) {
     if (i > hashtags.length) {
       break;
     }
-    data.addRow([hashtags[i].tag, hashtags[i].count]);
+
+    data.addRow("#"+[hashtags[i].tag, hashtags[i].count]);
   }
 
-  var options = {};
-  var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+  var options = {height: 600};
+  var chart = new google.visualization.BarChart(document.getElementById('chart-div'));
   chart.draw(data, options);
 }
 
