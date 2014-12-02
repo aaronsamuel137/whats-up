@@ -128,6 +128,7 @@ if __name__ == '__main__':
     ]
 
     twitter_stream = Process(target=get_tweets, args=(tweet_queue, hashtag_queue,))
+    twitter_stream.daemon = True
     twitter_stream.start()
 
     application = tornado.web.Application(handlers, debug=options.debug, **settings)
