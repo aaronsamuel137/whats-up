@@ -24,7 +24,7 @@ def get_tweets(tweet_queue, hashtag_queue):
       queue (multiprocessing.Queue): The object for sending the hashtag map back
     """
     stream = MyStreamer(tweet_queue, hashtag_queue)
-    # stream.statuses.sample() #comment out for front end testing
+    stream.statuses.sample() #comment out for front end testing
 
 def get_tweets_by_topic(topic):
     return twitter.search(q=topic, result_type='recent', lang='en', count='100')
@@ -77,7 +77,7 @@ class MyStreamer(TwythonStreamer):
         self.tweet_queue = tweet_queue
         self.q = hashtag_queue
         self.hashtag_map = {}
-        
+
     def prune(self):
         # Determine when it is time to cut out an entry in the map
         max_value = max(self.hashtag_map.values())
@@ -92,4 +92,4 @@ class MyStreamer(TwythonStreamer):
 
         for key in keys_to_remove:
             del self.hashtag_map[key]
-    
+

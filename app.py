@@ -46,7 +46,7 @@ class HashtagHandler(tornado.web.RequestHandler):
         self.tag_queue = tag_queue
         self.tag_map = "{}"
 
-    def get(self):        
+    def get(self):
         try:
             hashtag_dict = self.tag_queue.get(True, 2)
             sorted_list_key_value_pair = [{'tag':key,'count':value} for key,value in sorted(hashtag_dict.items(), key=lambda a:a[-1], reverse=True)]
@@ -87,7 +87,7 @@ class APIHandler(tornado.web.RequestHandler):
         while len(tweets) < number:
             tweet = self.tweet_queue.get(True, 2)
             if self.filter_tweet(tweet):
-                tweets.append(tweet['text'])
+                tweets.append({'text': tweet['text'], 'sentiment': self.classifier.classify(extract_features(tweet['text']))})
 
         self.write(json.dumps(tweets))
 
