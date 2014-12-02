@@ -66,3 +66,18 @@ class MyStreamer(TwythonStreamer):
         self.tweet_queue = tweet_queue
         self.q = hashtag_queue
         self.r_server = redis.Redis('localhost')
+
+    def prune(self):
+        # Determine when it is time to cut out an entry in the map
+        max_value = max(self.hashtag_map.values())
+        cutoff_fraction = 0.25
+        cutoff_value = max_value * cutoff_fraction
+
+        # Remove entries where the value is too small
+        keys_to_remove = []
+        for key, value in self.hashtag_map.items():
+            if cutoff_value > value:
+                keys_to_remove.append(key)
+
+        for key in keys_to_remove:
+            del self.hashtag_map[key]

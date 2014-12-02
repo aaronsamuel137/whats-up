@@ -17,7 +17,8 @@ define('port', default=8888)
 define('debug', default=False)
 
 # filter out tweets with these words
-STOP_WORDS = ['fuck', 'bitch', 'shit', 'cunt', 'nigga']
+stopWordsFile = open('StopWords.txt', 'r')
+STOP_WORDS = [line.rstrip() for line in stopWordsFile]
 
 
 # Handler for main page
@@ -87,7 +88,7 @@ class APIHandler(tornado.web.RequestHandler):
         while len(tweets) < number:
             tweet = self.tweet_queue.get(True, 2)
             if self.filter_tweet(tweet):
-                tweets.append(tweet['text'])
+                tweets.append({'text': tweet['text'], 'sentiment': self.classifier.classify(extract_features(tweet['text']))})
 
         self.write(json.dumps(tweets))
 
@@ -128,6 +129,7 @@ if __name__ == '__main__':
     ]
 
     twitter_stream = Process(target=get_tweets, args=(tweet_queue, hashtag_queue,))
+    twitter_stream.daemon = True
     twitter_stream.start()
 
     application = tornado.web.Application(handlers, debug=options.debug, **settings)

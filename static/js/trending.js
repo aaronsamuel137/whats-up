@@ -36,8 +36,8 @@ function drawChart(hashtags) {
     data.addRow(['#' + hashtags[i].tag, hashtags[i].count]);
   }
 
-  var options = {height: 400};
-  var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+  var options = {height: 600};
+  var chart = new google.visualization.BarChart(document.getElementById('chart-div'));
   chart.draw(data, options);
 }
 
