@@ -16,7 +16,8 @@ define('port', default=8888)
 define('debug', default=False)
 
 # filter out tweets with these words
-STOP_WORDS = ['fuck', 'bitch', 'shit', 'cunt', 'nigga']
+stopWordsFile = open('StopWords.txt', 'r')
+STOP_WORDS = [line.rstrip() for line in stopWordsFile]
 
 
 # Handler for main page
