@@ -14,6 +14,8 @@ $(document).ready(function() {
   $('#tweet-listing-neg').empty();
   $('#neg-header').empty();
   $('#pos-header').empty();
+  $('#neg-count').empty();
+  $('#pos-count').empty();
 
 
   $('#spinner').append('<img src="/static/img/ajax-loader.gif">')
