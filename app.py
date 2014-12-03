@@ -78,7 +78,7 @@ class APIHandler(tornado.web.RequestHandler):
             tweets = []
             for tweet in response['statuses']:
                 if self.filter_tweet(tweet):
-                    tweets.append({'text': tweet['text'], 'sentiment': self.classifier.classify(extract_features(tweet['text']))})
+                    tweets.append({'text': tweet['text'], 'sentiment': self.classifier.classify(extract_features(tweet['text'])), 'rt_count': tweet['retweet_count']})
             self.write(json.dumps(tweets))
             return
 

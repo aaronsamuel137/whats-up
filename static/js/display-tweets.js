@@ -33,11 +33,12 @@ $(document).ready(function() {
 
     for (var i = 0; i < data.length; i++) {
       if(data[i].sentiment=="negative"){
-        $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br></span>'));
+        $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br>Retweet count: ' + data[i].rt_count));
         counterNeg++;
       }
       else{
-        $('#tweet-listing-pos').append($('<li/>').append(data[i].text + '<br></span>'));
+        $('#tweet-listing-pos').append($('<li/>').append(data[i].text + '<br>Retweet count: ' + data[i].rt_count));
+
         counterPos++;
       }
     }
