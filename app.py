@@ -51,7 +51,6 @@ class HashtagHandler(tornado.web.RequestHandler):
             self.r_server.get('something') # try to use redis to see if its available
             self.redis = True
         except redis.exceptions.ConnectionError:
-            print('WARNING: Redis server not running. App will run in in-memory mode')
             self.redis = False
 
     def get(self):
