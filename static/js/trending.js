@@ -5,6 +5,9 @@ google.load('visualization', '1.0', {'packages':['corechart']});
 // Set a callback to run when the Google Visualization API is loaded.
 google.setOnLoadCallback(loadHashtagData);
 
+// reload chart every 5 seconds
+setInterval(loadHashtagData, 5000);
+
 // Callback that creates and populates a data table,
 // instantiates the pie chart, passes in the data and
 // draws it.
@@ -43,13 +46,10 @@ function drawChart(hashtags) {
 
 function loadHashtagData() {
   var query = '/hashtagmap';
-  $('#chart-div').empty();
-  $('#spinner').empty()
-  $('#spinner').append('<img src="/static/img/ajax-loader.gif">')
   $.ajax({
     url: query
   }).then(function(data) {
-    $('#spinner').empty()
+    $('#spinner').hide()
     data = $.parseJSON(data);
     drawChart(data);
   });
