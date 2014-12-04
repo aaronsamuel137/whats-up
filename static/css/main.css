@@ -28,3 +28,7 @@ ul {
 #pos-header {
   color: #01A9DB;
 }
+
+.retweet {
+  font-weight: bold;
+}

@@ -33,14 +33,19 @@ $(document).ready(function() {
     counterPos = 0;
     counterNeg = 0;
 
+    data = data.sort(function (a, b) {
+      return b.rt_count - a.rt_count;
+    });
+
     for (var i = 0; i < data.length; i++) {
+      //print negative tweets
       if(data[i].sentiment=="negative"){
-        $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br>Retweet count: ' + data[i].rt_count));
+        $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br><span class="retweet">Retweet count: </span>' + data[i].rt_count));
         counterNeg++;
       }
+      //print positive tweets
       else{
-        $('#tweet-listing-pos').append($('<li/>').append(data[i].text + '<br>Retweet count: ' + data[i].rt_count));
-
+        $('#tweet-listing-pos').append($('<li/>').append(data[i].text + '<br><span class="retweet">Retweet count: </span>' + data[i].rt_count));
         counterPos++;
       }
     }
