@@ -47,10 +47,20 @@ class HashtagHandler(tornado.web.RequestHandler):
         self.tag_queue = tag_queue
         self.tag_map = '{}'
         self.r_server = redis.Redis('localhost')
+        try:
+            self.r_server.get('something') # try to use redis to see if its available
+            self.redis = True
+        except redis.exceptions.ConnectionError:
+            print('WARNING: Redis server not running. App will run in in-memory mode')
+            self.redis = False
 
     def get(self):
         try:
-            list_key_value_pair = [{'tag': key.decode('utf-8'), 'count': int(self.r_server.get(key).decode('utf-8'))} for key in self.r_server.keys()]
+            if self.redis:
+                list_key_value_pair = [{'tag': key.decode('utf-8'), 'count': int(self.r_server.get(key).decode('utf-8'))} for key in self.r_server.keys()]
+            else:
+                hashtag_dict = self.tag_queue.get(True, 2)
+                list_key_value_pair = [{'tag':key,'count':value} for key,value in sorted(hashtag_dict.items(), key=lambda a:a[-1], reverse=True)]
             self.tag_map = json.dumps(list_key_value_pair)
         except:
             print(sys.exc_info()[0])

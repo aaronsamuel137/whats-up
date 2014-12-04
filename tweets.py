@@ -35,11 +35,30 @@ class MyStreamer(TwythonStreamer):
     def add_hashtags_to_map(self, data):
         if not 'entities' in data or not 'hashtags' in data['entities']:
             return
-        for tag in data['entities']['hashtags']:
-            if self.r_server.exists(tag['text']):
-                self.r_server.incr(tag['text'])
-            else:
-                self.r_server.set(tag['text'], 1)
+
+        if self.redis:
+            for tag in data['entities']['hashtags']:
+                if self.r_server.exists(tag['text']):
+                    self.r_server.incr(tag['text'])
+                else:
+                    self.r_server.set(tag['text'], 1)
+
+        else:
+            for tag in data['entities']['hashtags']:
+                if tag['text'] in self.hashtag_map:
+                    self.hashtag_map[tag['text']] += 1
+                else:
+                    self.hashtag_map[tag['text']] = 1
+                try:
+                    self.q.get_nowait()
+                except Exception as e:
+                    pass
+                # File of the current map for testing purposes
+                #hashtagFile = open("HashtagTestingFile.txt", "w")
+                #map_string = json.dumps(dict(self.hashtag_map))
+                #hashtagFile.write(map_string)
+                #hashtagFile.close()
+                self.q.put(self.hashtag_map)
 
     def send_tweet(self, data):
         if self.tweet_queue.full():
@@ -65,7 +84,15 @@ class MyStreamer(TwythonStreamer):
         TwythonStreamer.__init__(self, APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
         self.tweet_queue = tweet_queue
         self.q = hashtag_queue
+        self.hashtag_map = {}
+
         self.r_server = redis.Redis('localhost')
+        try:
+            self.r_server.get('something') # try to use redis to see if its available
+            self.redis = True
+        except redis.exceptions.ConnectionError:
+            print('WARNING: Redis server not running. App will run in in-memory mode')
+            self.redis = False
 
     def prune(self):
         # Determine when it is time to cut out an entry in the map
