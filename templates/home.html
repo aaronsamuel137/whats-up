@@ -4,6 +4,14 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="/static/js/display-tweets.js"></script>
 <script type="text/javascript" src="/static/js/enter-to-submit.js"></script>
+<script>window.twttr = (function (d, s, id) {
+	var t, js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src= "https://platform.twitter.com/widgets.js";
+	fjs.parentNode.insertBefore(js, fjs);
+	return window.twttr || (t = { _e: [], ready: function (f) { t._e.push(f) } });
+}(document, "script", "twitter-wjs"));</script>
 {% end %}
 
 {% block header %}
@@ -11,7 +19,6 @@
 {% end %}
 
 {% block content %}
-
 <div class="row">
 	<div class="col-md-3"></div>
 	<div class="col-md-6">
@@ -52,7 +59,6 @@
 		<ul id="sentiment-listing"></ul>
 	</div>
 </div>
-
 {% end %}
 
 {% block footer %}
