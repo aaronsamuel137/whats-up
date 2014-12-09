@@ -1,34 +1,28 @@
 $(document).ready(function() {
-  var secondsBetweenReloads = 5;
+  $('#spinner').hide();
+})
 
-  // loadTweets(10);
-  // window.setInterval(function() {loadTweets(10);}, secondsBetweenReloads * 1000);
-});
+google.load("visualization", "1", {packages:["corechart"]});
+var refreshInterval;
 
 /*
  * load tweets from our rest endpoint and list the in the tweet-listing <ul>
  */
- function loadTweets(number, topic) {
+function loadTweets(number, topic) {
   var query = '/data?number=' + number + '&' + 'topic=' + topic;
-  $('#tweet-listing-pos').empty();
-  $('#tweet-listing-neg').empty();
-  $('#neg-header').empty();
-  $('#pos-header').empty();
-  $('#neg-count').empty();
-  $('#pos-count').empty();
 
+  // on the first time only, append these headers for positive and negative columns
+  if (!refreshInterval) {
+    $('#neg-header').append($('<h3>Negative</h3>'));
+    $('#pos-header').append($('<h3>Positive</h3>'));
+  }
 
-  $('#spinner').append('<img src="/static/img/ajax-loader.gif">')
   $.ajax({
     url: query
   }).then(function(data) {
-    $('#spinner').empty();
-    data = $.parseJSON(data);
-    console.log(data[0]);
 
-    $('#tweet-listing').empty();
-    $('#neg-header').append($('<h3>Negative</h3>'));
-    $('#pos-header').append($('<h3>Positive</h3>'));
+    $('#spinner').hide();
+    data = $.parseJSON(data);
 
     counterPos = 0;
     counterNeg = 0;
@@ -37,20 +31,23 @@ $(document).ready(function() {
       return b.rt_count - a.rt_count;
     });
 
+    var posTweetHTML = '', negTweetHTML = '';
     for (var i = 0; i < data.length; i++) {
       //print negative tweets
-      if(data[i].sentiment=="negative"){
-        $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br><span class="retweet">Retweet count: </span>' + data[i].rt_count));
+      if (data[i].sentiment == 'negative') {
+        negTweetHTML += '<li>' + data[i].text + '<br><span class="retweet">Retweet count: </span>' + data[i].rt_count + '</li>';
         counterNeg++;
       }
       //print positive tweets
-      else{
-        $('#tweet-listing-pos').append($('<li/>').append(data[i].text + '<br><span class="retweet">Retweet count: </span>' + data[i].rt_count));
+      else {
+        posTweetHTML += '<li>' + data[i].text + '<br><span class="retweet">Retweet count: </span>' + data[i].rt_count + '</li>';
         counterPos++;
       }
     }
-    $('#neg-count').append($('<h3>').append(counterNeg).append('</h3>'));
-    $('#pos-count').append($('<h3>').append(counterPos).append('</h3>'));
+
+    $('.tweet-listing').empty();
+    $('#tweet-listing-neg').append(negTweetHTML);
+    $('#tweet-listing-pos').append(posTweetHTML);
 
     $('#chart-div').empty();
     drawChart(counterPos, counterNeg);
@@ -58,8 +55,7 @@ $(document).ready(function() {
   });
 };
 
-google.load("visualization", "1", {packages:["corechart"]});
-google.setOnLoadCallback(drawChart);
+// google.setOnLoadCallback(drawChart);
 function drawChart(counterPos, counterNeg) {
 
   var data = google.visualization.arrayToDataTable([
@@ -86,9 +82,12 @@ function drawChart(counterPos, counterNeg) {
   chart.draw(data, options);
 }
 
-function getTweets(){
+function getTweets() {
+  $('#spinner').show();
+  clearInterval(refreshInterval);
   $('#search-btn').blur();
   var topic = $('#search-box').val();
   loadTweets(10, topic);
+  refreshInterval = setInterval(function() { loadTweets(10, topic); }, 5000);
   return false;
 }
