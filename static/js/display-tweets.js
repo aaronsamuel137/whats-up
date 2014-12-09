@@ -40,12 +40,16 @@ $(document).ready(function() {
     for (var i = 0; i < data.length; i++) {
       //print negative tweets
       if(data[i].sentiment=="negative"){
-        $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br><span class="retweet">Retweet count: </span>' + data[i].rt_count));
+        // $('#tweet-listing-neg').append($('<li/>').append(data[i].text + '<br><span class="retweet">Retweet count: </span>' + data[i].rt_count));
+        twttr.widgets.createTweet(data[i].tweet_id, document.getElementById('neg-tweets'));
+
         counterNeg++;
       }
       //print positive tweets
       else{
-        $('#tweet-listing-pos').append($('<li/>').append(data[i].text + '<br><span class="retweet">Retweet count: </span>' + data[i].rt_count));
+        // $('#tweet-listing-pos').append($('<li/>').append(data[i].text + '<br><span class="retweet">Retweet count: </span>' + data[i].rt_count));
+        twttr.widgets.createTweet(data[i].tweet_id, document.getElementById('pos-tweets'));
+
         counterPos++;
       }
     }
