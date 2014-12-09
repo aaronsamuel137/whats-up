@@ -88,7 +88,7 @@ class APIHandler(tornado.web.RequestHandler):
             tweets = []
             for tweet in response['statuses']:
                 if self.filter_tweet(tweet):
-                    tweets.append({'text': tweet['text'], 'sentiment': self.classifier.classify(extract_features(tweet['text'])), 'rt_count': tweet['retweet_count']})
+                    tweets.append({'text': tweet['text'], 'sentiment': self.classifier.classify(extract_features(tweet['text'])), 'rt_count': tweet['retweet_count'], 'tweet_id': tweet['id_str'] })
             self.write(json.dumps(tweets))
             return
 
@@ -97,7 +97,7 @@ class APIHandler(tornado.web.RequestHandler):
         while len(tweets) < number:
             tweet = self.tweet_queue.get(True, 2)
             if self.filter_tweet(tweet):
-                tweets.append({'text': tweet['text'], 'sentiment': self.classifier.classify(extract_features(tweet['text'])), 'rt_count': tweet['retweet_count']})
+                tweets.append({'text': tweet['text'], 'sentiment': self.classifier.classify(extract_features(tweet['text'])), 'rt_count': tweet['retweet_count'], 'tweet_id': tweet['id_str'] })
 
         self.write(json.dumps(tweets))
 
