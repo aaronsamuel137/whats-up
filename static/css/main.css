@@ -1,3 +1,5 @@
+/*@import url(http://fonts.googleapis.com/css?family=Codystar);*/
+
 h1 {
   text-align: center;
 }
@@ -6,7 +8,8 @@ ul {
   padding-left: 0;
   /*text-align: center;  */
 }
-.tweet-listing li{
+
+.tweet-listing li {
   margin-bottom: 20px;
   background-color: #EBEBEB;
   font-family: Verdana, Helvetica, sans-serif;
@@ -17,6 +20,7 @@ ul {
   -moz-border-radius: 20px;
   -webkit-border-radius: 20px;
 }
+
 .tweet-listing li:first-child {
   margin-top: 30px;
 }
@@ -31,4 +35,57 @@ ul {
 
 .retweet {
   font-weight: bold;
+}
+
+#jqtagcloud {
+  min-width: 300px;
+  min-height: 600px;
+}
+
+.jqtagcloud span {
+  font-family: scoreboard, sans-serif;
+  font-family: Codystar, sans-serif;
+  font-weight: 700;
+  text-shadow: 1px 1px rgba(128,128,128,0.75);
+}
+
+span.w1 {
+  color: black;
+  font-size: 10px;
+}
+span.w2 {
+  color: purple;
+  font-size: 12px;
+}
+span.w3 {
+  color: purple;
+  font-size: 15px;
+}
+span.w4 {
+  color: blue;
+  font-size: 20px;
+}
+span.w5 {
+  color: blue;
+  font-size: 25px;
+}
+span.w6 {
+  color: green;
+  font-size: 30px;
+}
+span.w7 {
+  color: orange;
+  font-size: 35px;
+}
+span.w8 {
+  color: yellow;
+  font-size: 40px;
+}
+span.w9 {
+  color: red;
+  font-size: 45px;
+}
+span.w10 {
+  color: red;
+  font-size: 50px;
 }
