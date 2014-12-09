@@ -36,11 +36,6 @@ class TrendingHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('trending.html', title="Trending")
 
-# Handler for sentiments page
-class SentimentsHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render('sentiments.html', title="Sentiments")
-
 # Handler for the live updating hashtag counts
 class HashtagHandler(tornado.web.RequestHandler):
     def initialize(self, tag_queue):
@@ -132,7 +127,6 @@ if __name__ == '__main__':
         (r'/', MainHandler),
         (r'/data', APIHandler, dict(tweet_queue=tweet_queue)),
         (r'/about', AboutHandler),
-        (r'/sentiments', SentimentsHandler),
         (r'/trending', TrendingHandler),
         (r'/hashtagmap', HashtagHandler, dict(tag_queue=hashtag_queue)),
     ]
