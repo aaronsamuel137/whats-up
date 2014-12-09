@@ -27,6 +27,9 @@ $(document).ready(function() {
     console.log(data[0]);
 
     $('#tweet-listing').empty();
+    $('#neg-tweets').empty();
+    $('#pos-tweets').empty();
+
     $('#neg-header').append($('<h3>Negative</h3>'));
     $('#pos-header').append($('<h3>Positive</h3>'));
 
