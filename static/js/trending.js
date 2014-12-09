@@ -8,6 +8,9 @@ google.setOnLoadCallback(loadHashtagData);
 // reload chart every 5 seconds
 setInterval(loadHashtagData, 5000);
 
+var MAX_WORDS = 50;
+var numWords = 20;
+
 // Callback that creates and populates a data table,
 // instantiates the pie chart, passes in the data and
 // draws it.
@@ -32,12 +35,18 @@ function drawChart(hashtags) {
     return b.count - a.count;
   });
 
-  for (var i = 0; i < 10; i++) {
+  var wordCloud = [];
+  for (var i = 0; i < Math.min(numWords, MAX_WORDS); i++) {
     if (i > hashtags.length) {
       break;
     }
-    data.addRow(['#' + hashtags[i].tag, hashtags[i].count]);
+    if (i < 10) { data.addRow(['#' + hashtags[i].tag, hashtags[i].count]); }
+    wordCloud.push({text: hashtags[i].tag, weight: hashtags[i].count});
   }
+  numWords++;
+
+  $('#jqtagcloud').empty();
+  $('#jqtagcloud').jQCloud(wordCloud);
 
   var options = {height: 600};
   var chart = new google.visualization.BarChart(document.getElementById('chart-div'));

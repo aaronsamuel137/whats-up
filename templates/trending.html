@@ -3,6 +3,7 @@
 {% block head %}
     <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="/static/js/jqcloud-1.0.4.js"></script>
     <script type="text/javascript" src="/static/js/trending.js"></script>
 {% end %}
 
@@ -12,14 +13,13 @@
 
 {% block content %}
 <p class="lead">Trending topics on Twitter based on hashtags. </p>
+<img id="spinner" src="/static/img/ajax-loader.gif">
 <div class="row">
-  <div class="col-md-3"></div>
   <div class="col-md-6">
-    <img id="spinner" src="/static/img/ajax-loader.gif">
     <div id="chart-div"></div>
   </div>
-  <div class="col-md-3">
-    <ul id="sentiment-listing"></ul>
+  <div class="col-md-6">
+    <div id="jqtagcloud" class="jqtagcloud"></div>
   </div>
 </div>
 {% end %}
