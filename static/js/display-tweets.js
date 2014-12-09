@@ -23,6 +23,8 @@ var refreshInterval;
 
     $('#neg-tweets').empty();
     $('#pos-tweets').empty();
+    $('#neg-header').empty();
+    $('#pos-header').empty();
 
     $('#spinner').hide();
     data = $.parseJSON(data);
