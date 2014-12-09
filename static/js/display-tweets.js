@@ -11,22 +11,19 @@ var refreshInterval;
  function loadTweets(number, topic) {
   var query = '/data?number=' + number + '&' + 'topic=' + topic;
 
-  // on the first time only, append these headers for positive and negative columns
-  if (!refreshInterval) {
-    $('#neg-header').append($('<h3>Negative</h3>'));
-    $('#pos-header').append($('<h3>Positive</h3>'));
-  }
+  $('#neg-tweets').empty();
+  $('#pos-tweets').empty();
+  $('#neg-header').empty();
+  $('#pos-header').empty();
+  $('#chart-div').empty();
 
   $.ajax({
     url: query
   }).then(function(data) {
 
-    $('#neg-tweets').empty();
-    $('#pos-tweets').empty();
-    $('#neg-header').empty();
-    $('#pos-header').empty();
-
     $('#spinner').hide();
+    $('#neg-header').append($('<h3>Negative</h3>'));
+    $('#pos-header').append($('<h3>Positive</h3>'));
     data = $.parseJSON(data);
 
     counterPos = 0;
